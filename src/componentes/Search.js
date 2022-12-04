@@ -1,20 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap'
-
-function Search(props) {
+import { listarRestaurantes } from '../restauranteService'
+function Search() {
     const [input, setInput] = useState('');
-    const [restaurants, setRestaurants] = useState([]);
+    const [restaurantes, setRestaurantes] = useState([]);
 
     const getName = e => {
+        getRestaurantes();
         setInput(e.target.value)
     }
     const searchRestaurant = e => {
         e.preventDefault();
 
-        const restaurantList = props.restaurants.filter((el) =>
-            el.name.toLowerCase().indexOf(input.toLowerCase()) > -1
+        const restauranteList = restaurantes.filter((el) =>
+            el.nombre.toLowerCase().indexOf(input.toLowerCase()) > -1
         );
-        setRestaurants(restaurantList)
+        setRestaurantes(restauranteList)
+        setInput('')
+    }
+
+    useEffect(() => {
+        getRestaurantes();
+    }, []);
+
+    const getRestaurantes = async () => {
+        try{
+            const restaurantesFirebase = await listarRestaurantes();
+            setRestaurantes(restaurantesFirebase)
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -31,18 +46,18 @@ function Search(props) {
         </div>
             <Row className="my-3 justify-content-center">
                 <Col md={6}>
-                    {restaurants.map(restaurante => (
+                    {restaurantes.map(restaurante => (
                         <Row key={restaurante.id} className="g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <Col className="p-4 d-flex flex-column position-static">
                                 <Card.Body>
-                                    <h3 className="my-2">{restaurante.name}</h3>
-                                    <Card.Text>{restaurante.description}</Card.Text>
-                                    <Card.Text>{restaurante.address}</Card.Text>
+                                    <h3 className="my-2">{restaurante.nombre}</h3>
+                                    <Card.Text>{restaurante.descripcion}</Card.Text>
+                                    <Card.Text>{restaurante.direccion}</Card.Text>
                                 </Card.Body>
                                 <Col className="d-none d-lg-block">
                                     <Card.Img 
                                         className="card-img-top"
-                                        src={restaurante.image}
+                                        src={restaurante.url}
                                         alt="foto restaurante 1"
                                     />
                                 </Col>
