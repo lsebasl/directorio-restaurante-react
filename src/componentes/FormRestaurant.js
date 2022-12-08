@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {Container, Form, Button } from 'react-bootstrap';
 import { crearRestaurante } from '../restauranteService';
+import Swal from 'sweetalert2';
 
 function FormRestaurant() {
     const [restaurante, setRestaurante] = useState({});
@@ -15,8 +16,23 @@ function FormRestaurant() {
         e.preventDefault();
        
         try{
-            crearRestaurante(restaurante)
-            setRestaurante([])
+            
+            if( restaurante.name === undefined || 
+                restaurante.address === undefined ||
+                restaurante.description === undefined ||
+                restaurante.url === undefined
+            ){
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'El formulario debe estar completo',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                  })
+            }else {
+                crearRestaurante(restaurante)
+                setRestaurante([])
+            }
+            
         } catch(e){
             console.log(e)
         }

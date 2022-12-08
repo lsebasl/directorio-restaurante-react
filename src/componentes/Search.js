@@ -13,7 +13,7 @@ function Search() {
         e.preventDefault();
 
         const restauranteList = restaurantes.filter((el) =>
-            el.nombre.toLowerCase().indexOf(input.toLowerCase()) > -1
+            el.nombre.toLowerCase().includes(input.toLowerCase())
         );
         setRestaurantes(restauranteList)
         setInput('')
