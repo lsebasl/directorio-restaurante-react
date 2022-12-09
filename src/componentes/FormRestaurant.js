@@ -17,9 +17,9 @@ function FormRestaurant() {
        
         try{
             
-            if( restaurante.name === undefined || 
-                restaurante.address === undefined ||
-                restaurante.description === undefined ||
+            if( restaurante.nombre === undefined || 
+                restaurante.direccion === undefined ||
+                restaurante.descripcion === undefined ||
                 restaurante.url === undefined
             ){
                 Swal.fire({
